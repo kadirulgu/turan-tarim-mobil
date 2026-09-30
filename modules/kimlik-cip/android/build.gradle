@@ -1,0 +1,28 @@
+plugins {
+  id 'com.android.library'
+  id 'expo-module-gradle-plugin'
+}
+
+group = 'expo.modules.kimlikcip'
+version = '0.1.0'
+
+android {
+  namespace "expo.modules.kimlikcip"
+  defaultConfig {
+    versionCode 1
+    versionName "0.1.0"
+  }
+  lintOptions {
+    abortOnError false
+  }
+}
+
+dependencies {
+  // Kimlik kartı / pasaport çipi (ICAO 9303: PACE/BAC, DG1, SOD)
+  implementation 'org.jmrtd:jmrtd:0.8.8'
+  implementation 'net.sf.scuba:scuba-sc-android:0.0.27'
+  // Android'in kırpılmış BouncyCastle'ı PACE için yetmez; tam sürüm
+  implementation 'org.bouncycastle:bcprov-jdk18on:1.85'
+  // Kartın ön yüzünden seri no / doğum / son geçerlilik okumak için (cihaz üzerinde)
+  implementation 'com.google.mlkit:text-recognition:16.0.1'
+}

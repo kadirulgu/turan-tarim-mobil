@@ -1,0 +1,5 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+  <uses-permission android:name="android.permission.NFC" />
+  <!-- NFC'si olmayan telefonlara da kurulabilsin; uygulama bunu kendisi kontrol eder -->
+  <uses-feature android:name="android.hardware.nfc" android:required="false" />
+</manifest>
