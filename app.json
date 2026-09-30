@@ -2,11 +2,12 @@
   "expo": {
     "name": "Turan Tarım",
     "slug": "turan-tarim-kimlik",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "android": {
       "package": "com.turantarim.kimlik",
+      "versionCode": 2,
       "adaptiveIcon": {
         "backgroundColor": "#1b5e20",
         "foregroundImage": "./assets/android-icon-foreground.png"
@@ -16,11 +17,11 @@
     "plugins": [
       "expo-secure-store",
       [
-        "expo-image-picker",
+        "expo-camera",
         {
           "cameraPermission": "Kimlik kartının ön yüzünü okumak için kamera kullanılır.",
-          "photosPermission": false,
-          "microphonePermission": false
+          "recordAudioAndroid": false,
+          "barcodeScannerEnabled": false
         }
       ],
       [

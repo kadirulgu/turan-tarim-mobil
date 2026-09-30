@@ -1,4 +1,3 @@
-import * as ImagePicker from 'expo-image-picker';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect, useState } from 'react';
 import {
@@ -16,6 +15,7 @@ import {
 } from 'react-native';
 
 import KimlikCip, { type CipSonucu } from './modules/kimlik-cip';
+import KimlikKamerasi from './src/KimlikKamerasi';
 import { cariEkle, cikisYap, girisYap, oturumuGetir, type Kullanici } from './src/api';
 import {
   adiBirlestir,
@@ -60,18 +60,15 @@ export default function App() {
     setAdim('onYuz');
   };
 
-  const onYuzCek = async () => {
+  const [kameraAcik, setKameraAcik] = useState(false);
+
+  // Yeşil çerçeveli kameradan gelen, karta göre kırpılmış fotoğraf
+  const onYuzOku = async (uri: string) => {
+    setKameraAcik(false);
     setHata('');
-    const izin = await ImagePicker.requestCameraPermissionsAsync();
-    if (!izin.granted) {
-      setHata('Kamera izni verilmedi. Bilgileri aşağıya elle de girebilirsiniz.');
-      return;
-    }
-    const sonuc = await ImagePicker.launchCameraAsync({ mediaTypes: ['images'], quality: 0.9 });
-    if (sonuc.canceled) return;
     setMesgul(true);
     try {
-      const bilgi = onYuzuAyristir(await KimlikCip.metinOku(sonuc.assets[0].uri));
+      const bilgi = onYuzuAyristir(await KimlikCip.metinOku(uri));
       // Okunamayan alanlar önceki (ya da elle girilmiş) değerleri silmesin
       setOnYuz((o) => ({
         ad: bilgi.ad ?? o.ad,
@@ -191,7 +188,8 @@ export default function App() {
               Çipi açmak için kartın ön yüzündeki seri no, doğum tarihi ve son geçerlilik gerekir. Fotoğrafını çekin;
               okunamayanları elle düzeltebilirsiniz.
             </Text>
-            <Buton yazi="📷 Ön yüzün fotoğrafını çek" onPress={onYuzCek} mesgul={mesgul} />
+            <Buton yazi="📷 Ön yüzün fotoğrafını çek" onPress={() => setKameraAcik(true)} mesgul={mesgul} />
+            <KimlikKamerasi gorunur={kameraAcik} onCekildi={onYuzOku} onKapat={() => setKameraAcik(false)} />
             <Alan etiket="Seri No" deger={onYuz.seriNo ?? ''} onChange={(v) => setOnYuz({ ...onYuz, seriNo: v.toUpperCase() })} ornek="A12B34567" />
             <Alan etiket="Doğum Tarihi" deger={onYuz.dogumTarihi ?? ''} onChange={(v) => setOnYuz({ ...onYuz, dogumTarihi: v })} ornek="GG.AA.YYYY" sayisal />
             <Alan etiket="Son Geçerlilik" deger={onYuz.sonGecerlilik ?? ''} onChange={(v) => setOnYuz({ ...onYuz, sonGecerlilik: v })} ornek="GG.AA.YYYY" sayisal />
